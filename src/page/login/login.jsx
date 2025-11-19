@@ -1,0 +1,82 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './login.css';
+import { FiUser, FiLock } from 'react-icons/fi'; 
+import { verifyUser } from "../../data/Pass"; 
+
+function LoginScreen() {
+  const navigate = useNavigate(); 
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = () => {
+    setError('');
+    const result = verifyUser(username, password);
+
+    if (result) {
+      console.log('Login Successful! Redirecting to /setting');
+      navigate('/setting'); 
+
+    } else {
+      console.log('Login Failed: Invalid credentials');
+      setError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'); 
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <div className="logo-placeholder">
+        <div className="logo-base">
+          <div className="logo-inner-leaf"></div>
+          <div className="logo-inner-car"></div>
+        </div>
+      </div>
+
+      <h1 className="welcome-text">ยินดีต้อนรับกลับมา</h1>
+
+      <div className="input-area">
+        
+        <div className="input-group">
+          <FiUser className="input-icon" />
+          <input
+            type="text"
+            className="login-input"
+            placeholder="ชื่อผู้ใช้"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)} 
+          />
+        </div>
+
+        <div className="input-group">
+          <FiLock className="input-icon" />
+          <input
+            type="password"
+            className="login-input"
+            placeholder="รหัสผ่าน"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} 
+          />
+        </div>
+
+        {error && <p className="error-message">{error}</p>} 
+
+        <button className="login-button" onClick={handleLogin}>
+          LOGIN
+        </button>
+      </div>
+
+      <div className="bottom-links">
+        <a href="#" className="forgot-password-link" onClick={() => console.log('Forgot password clicked')}>
+          ลืมรหัสผ่าน?
+        </a>
+        <a href="#" className="register-link" onClick={() => console.log('Register clicked')}>
+          สมัครสมาชิก
+        </a>
+      </div>
+    </div>
+  );
+}
+
+export default LoginScreen;

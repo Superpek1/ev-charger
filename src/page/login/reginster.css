@@ -1,0 +1,109 @@
+:root {
+  --primary-green: #4CAF50;
+  --dark-background: #1e1e1e; 
+  --text-color: #f0f0f0; 
+  --input-background: #444444;
+  --input-placeholder-color: #bbbbbb; 
+
+}
+
+.register-container {
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  min-height: 100vh;
+  padding-bottom: 30px;
+}
+
+.register-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 15px;
+  background-color: #2a2a2a;
+  border-bottom: 1px solid #333;
+}
+
+.back-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.register-form {
+  padding: 20px 20px;
+}
+
+.input-label {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.text-input {
+  width: 100%;
+  padding: 15px 15px;
+  background-color: var(--input-background);
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.text-input::placeholder {
+  color: var(--input-placeholder-color);
+  opacity: 1; 
+}
+
+.date-input {
+  display: flex;
+}
+
+.date-input .text-input {
+  flex-grow: 1;
+  padding-right: 45px; 
+}
+
+.calendar-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--input-placeholder-color);
+  pointer-events: none; 
+}
+
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 30px;
+  background-color: var(--primary-green);
+  color: var(--dark-background);
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #43a047;
+}

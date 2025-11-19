@@ -1,0 +1,98 @@
+:root {
+  --primary-green: #4CAF50;
+  --dark-background: #1e1e1e; 
+  --text-color: #f0f0f0; 
+}
+
+.settings-container {
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  min-height: 100vh;
+  padding-bottom: 20px;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 15px;
+  background-color: #2a2a2a; 
+  border-bottom: 1px solid #333;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.notification-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--text-color);
+}
+
+.settings-section {
+  padding: 0 10px;
+  margin-top: 20px;
+}
+
+.section-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: #aaaaaa;
+  margin: 0 0 10px 10px;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-green);
+  color: var(--dark-background); 
+  margin-bottom: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  padding: 15px 15px; 
+  font-size: 18px;
+  
+  font-weight: 500;
+}
+
+.menu-item:hover {
+  background-color: #43a047; 
+}
+
+.menu-text-container {
+  display: flex;
+  align-items: center;
+  padding-left: 5px; 
+}
+
+.menu-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px; 
+  
+  color: var(--dark-background);
+}
+
+.chevron-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--dark-background);
+}
+
+.other-header {
+  margin-top: 15px;
+}
