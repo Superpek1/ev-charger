@@ -55,7 +55,7 @@ function SettingsScreen() {
         <MenuItem
           icon={FiTruck}
           title="พาหนะของฉัน"
-          onClick={() => navigate('/mycar')}
+          onClick={() => navigate('/mygarage')}
         />
         <MenuItem
           icon={FiCreditCard}
@@ -69,7 +69,7 @@ function SettingsScreen() {
         <MenuItem
           icon={FiLock}
           title="เปลี่ยนรหัสผ่าน"
-          onClick={() => console.log('ไปหน้าเปลี่ยนรหัสผ่าน')}
+          onClick={() => navigate('/change-password')}
         />
         <MenuItem
           icon={FiPhone}

@@ -1,75 +1,179 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
 import { FiArrowLeft } from 'react-icons/fi'; 
 import { FaCalendarAlt } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+
+import { useAuth } from '../../utils/AuthContext'; 
 
 function Profile() {
-  return (
-    <div className="register-container">
-      <header className="register-header">
-        <FiArrowLeft className="back-icon" onClick={() => console.log('Go back')} />
-        <h1 className="header-title">สมัครสมาชิก</h1>
-        <div style={{ width: '24px' }}></div> 
-      </header>
+    const navigate = useNavigate();
+    const { currentUser } = useAuth();
+    
+  
+    const [profileData, setProfileData] = useState({
+        username: '',
+        idCard: '',
+        firstName: '',
+        lastName: '',
+        dob: '',
+        phone: '',
+    });
+    const [message, setMessage] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
 
-      <div className="register-form">
-        
-        <label htmlFor="idCard" className="input-label">เลขบัตรประจำตัวประชาชน</label>
-        <div className="input-group">
-          <input
-            id="idCard"
-            type="text"
-            className="text-input"
-            placeholder="เลขบัตรประจำตัวประชาชน"
-          />
-        </div>
+    useEffect(() => {
+        if (currentUser) {
+            const usersJSON = localStorage.getItem('users');
+            const existingUsers = usersJSON ? JSON.parse(usersJSON) : [];
+            
+            const userProfile = existingUsers.find(u => u.username === currentUser);
+            
+            if (userProfile) {
+                setProfileData(userProfile);
+            } else {
+                setMessage('ไม่พบข้อมูลโปรไฟล์ กรุณาล็อกอินใหม่');
+                // navigate('/login'); 
+            }
+        }
+    }, [currentUser, navigate]);
 
-        <label htmlFor="firstName" className="input-label">ชื่อ</label>
-        <div className="input-group">
-          <input
-            id="firstName"
-            type="text"
-            className="text-input"
-            placeholder="ชื่อ"
-          />
-        </div>
 
-        <label htmlFor="lastName" className="input-label">นามสกุล</label>
-        <div className="input-group">
-          <input
-            id="lastName"
-            type="text"
-            className="text-input"
-            placeholder="นามสกุล"
-          />
-        </div>
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setProfileData(prevData => ({
+            ...prevData,
+            [id]: value
+        }));
+    };
 
-        <label htmlFor="dob" className="input-label">วัน/เดือน/ปีเกิด</label>
-        <div className="input-group date-input">
-          <input
-            id="dob"
-            type="text" 
-            className="text-input"
-            placeholder="วัน/เดือน/ปีเกิด"
-          />
-          <FaCalendarAlt className="calendar-icon" />
-        </div>
 
-        <label htmlFor="phone" className="input-label">เบอร์โทรศัพท์</label>
-        <div className="input-group">
-          <input
-            id="phone"
-            type="tel"
-            className="text-input"
-            placeholder="เบอร์โทรศัพท์"
-          />
+    const handleSave = (e) => {
+        e.preventDefault();
+        setMessage('');
+
+        const usersJSON = localStorage.getItem('users');
+        let existingUsers = usersJSON ? JSON.parse(usersJSON) : [];
+
+        const userIndex = existingUsers.findIndex(u => u.username === currentUser);
+
+        if (userIndex !== -1) {
+            existingUsers[userIndex] = {
+                ...existingUsers[userIndex],
+                ...profileData,
+                username: currentUser 
+            };
+            
+            localStorage.setItem('users', JSON.stringify(existingUsers));
+            
+            setMessage('บันทึกข้อมูลโปรไฟล์เรียบร้อยแล้ว!');
+            setIsEditing(false);
+        } else {
+            setMessage('บันทึกข้อมูลไม่สำเร็จ: ไม่พบชื่อผู้ใช้');
+        }
+    };
+
+    if (!currentUser) {
+        return <p>กรุณารอสักครู่ หรือกลับไปหน้าล็อกอิน</p>;
+    }
+
+
+    return (
+        <div className="register-container">
+            <header className="register-header">
+                <FiArrowLeft className="back-icon" onClick={() => navigate(-1)} /> 
+                <h1 className="header-title">ข้อมูลส่วนตัว ({currentUser})</h1>
+                <button 
+                    className="edit-button" 
+                    onClick={() => setIsEditing(!isEditing)} 
+                    style={{ background: 'none', border: 'none', color: isEditing ? 'red' : 'white' }}
+                >
+                    {isEditing ? 'ยกเลิก' : 'แก้ไข'}
+                </button>
+            </header>
+
+            <form className="register-form" onSubmit={handleSave}> 
+                {message && <p style={{ color: message.includes('สำเร็จ') ? 'green' : 'red', marginBottom: '15px' }}>{message}</p>}
+                
+                {/* --- ข้อมูลส่วนตัว --- */}
+                
+                <label htmlFor="idCard" className="input-label">เลขบัตรประจำตัวประชาชน</label>
+                <div className="input-group">
+                    <input
+                        id="idCard"
+                        type="text"
+                        className="text-input"
+                        placeholder="เลขบัตรประจำตัวประชาชน"
+                        value={profileData.idCard || ''}
+                        onChange={handleChange}
+                        readOnly={!isEditing}
+                    />
+                </div>
+
+                <label htmlFor="firstName" className="input-label">ชื่อ</label>
+                <div className="input-group">
+                    <input
+                        id="firstName"
+                        type="text"
+                        className="text-input"
+                        placeholder="ชื่อ"
+                        value={profileData.firstName || ''}
+                        onChange={handleChange}
+                        readOnly={!isEditing}
+                    />
+                </div>
+
+                <label htmlFor="lastName" className="input-label">นามสกุล</label>
+                <div className="input-group">
+                    <input
+                        id="lastName"
+                        type="text"
+                        className="text-input"
+                        placeholder="นามสกุล"
+                        value={profileData.lastName || ''}
+                        onChange={handleChange}
+                        readOnly={!isEditing}
+                    />
+                </div>
+
+                <label htmlFor="dob" className="input-label">วัน/เดือน/ปีเกิด</label>
+                <div className="input-group date-input">
+                    <input
+                        id="dob"
+                        type="text" 
+                        className="text-input"
+                        placeholder="วัน/เดือน/ปีเกิด"
+                        value={profileData.dob || ''}
+                        onChange={handleChange}
+                        readOnly={!isEditing}
+                    />
+                    <FaCalendarAlt className="calendar-icon" />
+                </div>
+
+                <label htmlFor="phone" className="input-label">เบอร์โทรศัพท์</label>
+                <div className="input-group">
+                    <input
+                        id="phone"
+                        type="tel"
+                        className="text-input"
+                        placeholder="เบอร์โทรศัพท์"
+                        value={profileData.phone || ''}
+                        onChange={handleChange}
+                        readOnly={!isEditing}
+                    />
+                </div>
+
+                {isEditing && (
+                    <button type="submit" className="submit-button">บันทึกการแก้ไข</button>
+                )}
+                {!isEditing && (
+                     <Link to={'/setting'}>
+                        <button className="submit-button">ตกลง/กลับหน้าหลัก</button>
+                     </Link>
+                )}
+            </form>
         </div>
-        <Link to={'/setting'}>
-        <button className="submit-button">ตกลง</button></Link>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default Profile;
