@@ -24,9 +24,9 @@ const CarItem = ({ car, onAddCar }) => {
 
       <button
         className="add-car-button"
-        onClick={() => onAddCar(car)} // ส่ง Object รถยนต์ทั้งก้อนไป
+        onClick={() => onAddCar(car)}
       >
-        เพิ่มรถ
+        กรอกข้อมูล
       </button>
     </div>
   );
@@ -41,11 +41,10 @@ function MyCarScreen() {
 
   const chargerTypes = ['รูปแบบหัวชาตทั้งหมด', 'หัวชาต001', 'หัวชาต002', 'หัวชาต003'];
 
-  // ******* แก้ไขฟังก์ชันนี้เพื่อนำทาง *******
   const handleAddCar = (car) => {
     navigate(`/carme/${car.Id}`);
   };
-  // ***************************************
+
 
   const handleChargerTypeChange = (e) => {
     setSelectedChargerType(e.target.value);

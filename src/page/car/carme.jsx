@@ -1,71 +1,99 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './mycar.css'; 
 import { FiArrowLeft } from 'react-icons/fi';
 import { TypeClassCar } from "../../data/Car"; 
-import { useAuth } from '../../utils/AuthContext'; 
+import { useAuth } from '../../utils/AuthContext'; // *** นำกลับมาใช้ ***
 
 
 function CarmeScreen() {
     const navigate = useNavigate();
     const { carId } = useParams(); 
     const allCars = TypeClassCar(); 
-    const { currentUser } = useAuth(); 
+    const { currentUser } = useAuth(); // *** ดึงผู้ใช้ที่ล็อกอินจริง ***
     
+    const [licensePlate, setLicensePlate] = useState('');
+
     const selectedCar = useMemo(() => {
         const idToFind = Number(carId); 
         return allCars.find(car => car.Id === idToFind);
     }, [allCars, carId]);
 
     const handleConfirmAdd = () => {
+        
+        // ******* 1. ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่ *******
         if (!currentUser) {
-            alert('กรุณาล็อกอินก่อนเพิ่มรถ');
+            alert('กรุณาล็อกอินก่อนเพิ่มรถยนต์');
             return navigate('/login');
         }
+        // *************************************************
+
         if (!selectedCar) {
             alert('ไม่พบข้อมูลรถยนต์ที่ต้องการเพิ่ม');
             return;
         }
 
+        // 2. ตรวจสอบการกรอกป้ายทะเบียน (บังคับ)
+        if (!licensePlate.trim()) {
+            alert('กรุณากรอกแผ่นป้ายทะเบียน');
+            return;
+        }
+        
+        // *** ลบ: โค้ดที่สร้างหรือใช้ tempUsername: 'guest_test' ออกทั้งหมด ***
+
         const usersJSON = localStorage.getItem('users');
         let existingUsers = usersJSON ? JSON.parse(usersJSON) : [];
-        const userIndex = existingUsers.findIndex(u => u.username === currentUser);
         
-        if (userIndex !== -1) {
-            const user = existingUsers[userIndex];
-            
-            if (!user.cars) {
-                user.cars = [];
-            }
-            
-            if (user.cars.some(c => c.Id === selectedCar.Id)) {
-                 alert(`รถ ${selectedCar.Name} ถูกเพิ่มในบัญชีแล้ว`);
-                 return navigate(-1);
-            }
-            
-            user.cars.push(selectedCar); 
-            alert(`เพิ่มรถ ${selectedCar.Name} เข้าโปรไฟล์สำเร็จ!`);
-            
-            existingUsers[userIndex] = user;
-            localStorage.setItem('users', JSON.stringify(existingUsers));
-            navigate(-1); 
-        } else {
-            alert('ไม่พบข้อมูลผู้ใช้');
-            navigate('/login');
+        // ค้นหา Index ของผู้ใช้ที่ล็อกอินอยู่ (currentUser)
+        let userIndex = existingUsers.findIndex(u => u.username === currentUser);
+        
+        if (userIndex === -1) {
+             alert('ไม่พบข้อมูลผู้ใช้ที่ล็อกอิน');
+             return navigate('/login');
         }
+
+        const user = existingUsers[userIndex];
+        if (!user.cars) {
+            user.cars = [];
+        }
+        
+        // 3. ตรวจสอบการเพิ่มรถซ้ำ (รุ่นและป้ายทะเบียนต้องไม่ซ้ำ)
+        if (user.cars.some(c => c.Id === selectedCar.Id && c.licensePlate === licensePlate.trim())) {
+             alert(`รถ ${selectedCar.Name} พร้อมป้ายทะเบียนนี้ ถูกเพิ่มในบัญชีแล้ว`);
+             
+             // นำทางไปหน้า Car Now แม้ว่าจะเพิ่มซ้ำ
+             return navigate('/mygarage'); 
+        }
+        
+        // 4. เพิ่มรถคันใหม่
+        const newCarWithPlate = {
+            ...selectedCar,
+            licensePlate: licensePlate.trim()
+        };
+
+        user.cars.push(newCarWithPlate);
+        alert(`เพิ่มรถ ${selectedCar.Name} (ป้ายทะเบียน ${licensePlate.trim()}) เข้าบัญชีสำเร็จ!`);
+        
+        existingUsers[userIndex] = user;
+        localStorage.setItem('users', JSON.stringify(existingUsers));
+        
+        // 5. นำทางไปยังหน้า Car Now
+        navigate('/mygarage'); 
     };
 
     if (!selectedCar) {
-        return (
-            <div className="mycar-container" style={{ textAlign: 'center', paddingTop: '50px', color: 'white' }}>
+         return (
+             <div className="mycar-container" style={{ textAlign: 'center', paddingTop: '50px', color: 'white' }}>
                  <h1 className="header-title" style={{ color: 'white' }}>ไม่พบข้อมูลรถยนต์</h1>
                  <button className="submit-button" onClick={() => navigate(-1)}>กลับไปเลือกใหม่</button>
-            </div>
-        );
+             </div>
+         );
     }
+    
+    // แสดงรายละเอียดรถเพื่อยืนยัน
     return (
         <div className="mycar-container">
-             <header className="mycar-header">
+            <header className="mycar-header">
                 <FiArrowLeft 
                     className="back-icon" 
                     onClick={() => navigate(-1)} 
@@ -75,7 +103,6 @@ function CarmeScreen() {
                 <div style={{ width: '24px' }}></div> 
             </header>
 
-            {/* เพิ่ม Padding ใน Container */}
             <div className="carme-content-wrapper" style={{ padding: '0 20px' }}> 
                 <div className="carme-detail-card">
                     <img src={selectedCar.src} alt={selectedCar.Name} className="carme-image-detail" />
@@ -83,6 +110,30 @@ function CarmeScreen() {
                     <h2>{selectedCar.Name}</h2>
                     <p>รูปแบบหัวชาร์จ: <strong>{selectedCar.Type}</strong></p>
                     <p>ID รถ: {selectedCar.Id}</p>
+                    <p>คำอธิบาย: รถยนต์ไฟฟ้ารุ่นใหม่ล่าสุดจาก EV-Charger เหมาะสำหรับทุกการใช้งาน</p>
+
+                    {/* Input ป้ายทะเบียน */}
+                    <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#333', borderRadius: '5px' }}>
+                        <label htmlFor="licensePlate" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
+                        แผ่นป้ายทะเบียน (บังคับ)
+                        </label>
+                        <input
+                            id="licensePlate"
+                            type="text"
+                            placeholder="เช่น กข 1234 กทม."
+                            value={licensePlate}
+                            onChange={(e) => setLicensePlate(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '10px',
+                                borderRadius: '3px',
+                                border: '1px solid #555',
+                                backgroundColor: '#444',
+                                color: 'white',
+                                boxSizing: 'border-box'
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
             
@@ -90,7 +141,7 @@ function CarmeScreen() {
                 className="submit-button" 
                 onClick={handleConfirmAdd}
             >
-                ยืนยันการเพิ่ม {selectedCar.Name} เข้าบัญชี
+                ยืนยันการเพิ่ม {selectedCar.Name}
             </button>
         </div>
     );

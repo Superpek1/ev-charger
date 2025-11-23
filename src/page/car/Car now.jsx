@@ -1,14 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
-// ใช้ CSS เดียวกับหน้า MyCar
 import './mycar.css'; 
-// ใช้ AuthContext เพื่อดึงผู้ใช้ปัจจุบัน
-import { useAuth } from '../../utils/AuthContext'; 
+import { useAuth } from '../../utils/AuthContext'; // *** นำกลับมาใช้ ***
 
 // ----------------------------------------------------------------------
-// Component ย่อยสำหรับแสดงรถที่ผู้ใช้เป็นเจ้าของ
+// Component ย่อยสำหรับแสดงรถที่ผู้ใช้เป็นเจ้าของ (ไม่เปลี่ยนแปลง)
 const OwnedCarItem = ({ car, onDeleteCar }) => {
+    // ... (โค้ดของ OwnedCarItem) ...
+    const displayLicensePlate = car.licensePlate || '— ไม่มีข้อมูลป้ายทะเบียน —'; 
+
     return (
         <div className="car-item">
             <div className="image-placeholder">
@@ -20,6 +21,10 @@ const OwnedCarItem = ({ car, onDeleteCar }) => {
                     <span className="info-label">ชื่อรถ</span>
                     <span className="info-value">**{car.Name}**</span>
                 </div>
+                <div className="info-row license-row" style={{ marginTop: '5px' }}>
+                    <span className="info-label">ป้ายทะเบียน</span>
+                    <span className="info-value">{displayLicensePlate}</span>
+                </div>
                 <div className="info-row type-row">
                     <span className="info-label">รูปแบบหัวชาต</span>
                     <span className="info-value">{car.Type}</span>
@@ -27,8 +32,8 @@ const OwnedCarItem = ({ car, onDeleteCar }) => {
             </div>
 
             <button 
-                className="remove-car-button" // อาจจะต้องเพิ่ม style ใน mycar.css
-                onClick={() => onDeleteCar(car.Id, car.Name)}
+                className="remove-car-button"
+                onClick={() => onDeleteCar(car.Id, car.Name, car.licensePlate)} 
             >
                 <FiTrash2 style={{ marginRight: '5px' }} /> ลบออกจากบัญชี
             </button>
@@ -40,46 +45,55 @@ const OwnedCarItem = ({ car, onDeleteCar }) => {
 
 function CarNowScreen() {
     const navigate = useNavigate();
-    const { currentUser } = useAuth(); // ผู้ใช้ที่ล็อกอินอยู่
+    const { currentUser } = useAuth(); // *** ดึงผู้ใช้ที่ล็อกอินจริง ***
+    const [refresh, setRefresh] = useState(0); 
 
-    // ฟังก์ชันสำหรับดึงข้อมูลรถยนต์ที่ผู้ใช้เป็นเจ้าของ
-    const getOwnedCars = () => {
-        if (!currentUser) return [];
-        
+    // ******* แก้ไขตรงนี้: ฟังก์ชันสำหรับดึงข้อมูลรถยนต์ *******
+    const getOwnedCars = useCallback(() => {
+        if (!currentUser) return []; // ถ้าไม่ล็อกอิน จะคืนค่าว่าง
+
         const usersJSON = localStorage.getItem('users');
         const existingUsers = usersJSON ? JSON.parse(usersJSON) : [];
+        
+        // ค้นหาบัญชีที่ล็อกอินอยู่ (currentUser)
         const user = existingUsers.find(u => u.username === currentUser);
         
         // คืนค่า Array ของรถยนต์ (หากไม่มีจะคืนค่าเป็น Array ว่าง [])
         return user && user.cars ? user.cars : [];
-    };
+    }, [currentUser, refresh]); // ใช้ currentUser เป็น dependency
 
-    const ownedCars = useMemo(getOwnedCars, [currentUser]);
+    const ownedCars = useMemo(getOwnedCars, [getOwnedCars]);
 
 
     // ฟังก์ชันสำหรับลบรถออกจากบัญชี
-    const handleDeleteCar = (carId, carName) => {
-        if (!window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบรถ ${carName} ออกจากบัญชี?`)) {
+    const handleDeleteCar = (carId, carName, licensePlate) => {
+        
+        if (!currentUser) return alert('กรุณาล็อกอินก่อนลบรถยนต์');
+
+        const identifier = licensePlate ? `รถ ${carName} (ป้าย ${licensePlate})` : `รถ ${carName}`;
+        if (!window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบ ${identifier} ออกจากบัญชี?`)) {
             return;
         }
 
         const usersJSON = localStorage.getItem('users');
         let existingUsers = usersJSON ? JSON.parse(usersJSON) : [];
-        const userIndex = existingUsers.findIndex(u => u.username === currentUser);
+        const userIndex = existingUsers.findIndex(u => u.username === currentUser); // ค้นหาผู้ใช้ที่ล็อกอินอยู่
         
         if (userIndex !== -1) {
             const user = existingUsers[userIndex];
             
-            // กรองรถคันที่ไม่ต้องการออก
-            user.cars = user.cars.filter(car => car.Id !== carId);
+            // กรองรถโดยใช้ Id และ LicensePlate
+            user.cars = user.cars.filter(car => 
+                !(car.Id === carId && car.licensePlate === licensePlate)
+            );
             
             // บันทึกกลับ Local Storage
             existingUsers[userIndex] = user;
             localStorage.setItem('users', JSON.stringify(existingUsers));
             
-            alert(`ลบรถ ${carName} สำเร็จแล้ว`);
-            // โหลดหน้านี้ใหม่เพื่อให้รายการอัปเดต
-            navigate(0); // วิธีที่ง่ายที่สุดในการบังคับให้ Component โหลดใหม่
+            alert(`ลบ ${carName} สำเร็จแล้ว`);
+            
+            setRefresh(prev => prev + 1); 
         }
     };
     
@@ -110,9 +124,9 @@ function CarNowScreen() {
                 </div>
             ) : (
                 <div className="car-grid">
-                    {ownedCars.map(car => (
+                    {ownedCars.map((car, index) => (
                         <OwnedCarItem 
-                            key={car.Id} 
+                            key={`${car.Id}-${car.licensePlate || 'no-plate'}-${index}`} 
                             car={car} 
                             onDeleteCar={handleDeleteCar} 
                         />
