@@ -74,7 +74,7 @@ function SettingsScreen() {
         <MenuItem
           icon={FiPhone}
           title="ช่องทางติดต่อ"
-          onClick={() => console.log('ไปหน้าช่องทางติดต่อ')}
+          onClick={() => navigate('/contact')}
         />
       </div>
     </div>

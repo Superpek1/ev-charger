@@ -12,6 +12,7 @@ import Profile from './page/Profile/Profile.jsx';
 import ChangePasswordScreen from './page/Profile/ChangePasswordScreen.jsx';
 import CarmeScreen from './page/car/carme.jsx';
 import CarNowScreen from './page/car/Car now.jsx';
+import TidtorScreen from './page/contact/tidtor.jsx';
 
 
 import { AuthProvider } from "./utils/AuthContext.jsx";
@@ -68,7 +69,11 @@ function App() {
             <ProtectedRoute><CarNowScreen /></ProtectedRoute>
           } />
 
-          
+          <Route path="/contact" element={
+            <ProtectedRoute><TidtorScreen /></ProtectedRoute>
+          } />
+
+
           <Route path="*" element={<h1 style={{ textAlign: 'center' }}>404 - ไม่พบหน้า</h1>} />
 
         </Routes>
