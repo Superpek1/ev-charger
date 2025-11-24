@@ -3,14 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './mycar.css'; 
 import { FiArrowLeft } from 'react-icons/fi';
 import { TypeClassCar } from "../../data/Car"; 
-import { useAuth } from '../../utils/AuthContext'; // *** นำกลับมาใช้ ***
+import { useAuth } from '../../utils/AuthContext';
 
 
 function CarmeScreen() {
     const navigate = useNavigate();
     const { carId } = useParams(); 
     const allCars = TypeClassCar(); 
-    const { currentUser } = useAuth(); // *** ดึงผู้ใช้ที่ล็อกอินจริง ***
+    const { currentUser } = useAuth();
     
     const [licensePlate, setLicensePlate] = useState('');
 
@@ -21,30 +21,25 @@ function CarmeScreen() {
 
     const handleConfirmAdd = () => {
         
-        // ******* 1. ตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่ *******
         if (!currentUser) {
             alert('กรุณาล็อกอินก่อนเพิ่มรถยนต์');
             return navigate('/login');
         }
-        // *************************************************
 
         if (!selectedCar) {
             alert('ไม่พบข้อมูลรถยนต์ที่ต้องการเพิ่ม');
             return;
         }
 
-        // 2. ตรวจสอบการกรอกป้ายทะเบียน (บังคับ)
         if (!licensePlate.trim()) {
             alert('กรุณากรอกแผ่นป้ายทะเบียน');
             return;
         }
         
-        // *** ลบ: โค้ดที่สร้างหรือใช้ tempUsername: 'guest_test' ออกทั้งหมด ***
 
         const usersJSON = localStorage.getItem('users');
         let existingUsers = usersJSON ? JSON.parse(usersJSON) : [];
         
-        // ค้นหา Index ของผู้ใช้ที่ล็อกอินอยู่ (currentUser)
         let userIndex = existingUsers.findIndex(u => u.username === currentUser);
         
         if (userIndex === -1) {
@@ -56,16 +51,12 @@ function CarmeScreen() {
         if (!user.cars) {
             user.cars = [];
         }
-        
-        // 3. ตรวจสอบการเพิ่มรถซ้ำ (รุ่นและป้ายทะเบียนต้องไม่ซ้ำ)
         if (user.cars.some(c => c.Id === selectedCar.Id && c.licensePlate === licensePlate.trim())) {
              alert(`รถ ${selectedCar.Name} พร้อมป้ายทะเบียนนี้ ถูกเพิ่มในบัญชีแล้ว`);
              
-             // นำทางไปหน้า Car Now แม้ว่าจะเพิ่มซ้ำ
              return navigate('/mygarage'); 
         }
         
-        // 4. เพิ่มรถคันใหม่
         const newCarWithPlate = {
             ...selectedCar,
             licensePlate: licensePlate.trim()
@@ -77,7 +68,6 @@ function CarmeScreen() {
         existingUsers[userIndex] = user;
         localStorage.setItem('users', JSON.stringify(existingUsers));
         
-        // 5. นำทางไปยังหน้า Car Now
         navigate('/mygarage'); 
     };
 
@@ -90,7 +80,6 @@ function CarmeScreen() {
          );
     }
     
-    // แสดงรายละเอียดรถเพื่อยืนยัน
     return (
         <div className="mycar-container">
             <header className="mycar-header">
@@ -112,7 +101,6 @@ function CarmeScreen() {
                     <p>ID รถ: {selectedCar.Id}</p>
                     <p>คำอธิบาย: รถยนต์ไฟฟ้ารุ่นใหม่ล่าสุดจาก EV-Charger เหมาะสำหรับทุกการใช้งาน</p>
 
-                    {/* Input ป้ายทะเบียน */}
                     <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#333', borderRadius: '5px' }}>
                         <label htmlFor="licensePlate" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
                         แผ่นป้ายทะเบียน (บังคับ)
@@ -141,7 +129,7 @@ function CarmeScreen() {
                 className="submit-button" 
                 onClick={handleConfirmAdd}
             >
-                ยืนยันการเพิ่ม {selectedCar.Name}
+                ยืนยันการกรอก {selectedCar.Name}
             </button>
         </div>
     );

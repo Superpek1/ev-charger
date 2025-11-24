@@ -26,20 +26,19 @@ function LoginScreen() {
     const [error, setError] = useState('');
 
 
-    const GUEST_USERNAME = '1';
-    const GUEST_PASSWORD = '1';
+    const DEFAULT_USERNAME = '1';
+    const DEFAULT_PASSWORD = '1';
 
     const handleLogin = (e) => {
         e.preventDefault(); 
         setError('');
 
 
-        if (username === GUEST_USERNAME && password === GUEST_PASSWORD) {
-            login(GUEST_USERNAME);
-            console.log('Login Successful! Redirecting to setting (Guest)');
-            alert("Guest Login successful! (รหัสเริ่มต้น)");
+        if (username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD) {
+            login(DEFAULT_USERNAME);
+            console.log('Login Successful! Redirecting to setting (Default User)');
             navigate('/setting'); 
-            return; 
+            return;
         }
         
         const usersJSON = localStorage.getItem('users');

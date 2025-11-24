@@ -51,12 +51,6 @@ function TidtorScreen() {
                     value="support@evcharger.com"
                 />
 
-                <ContactItem
-                    icon={FiMessageSquare}
-                    label="แชทสด"
-                    value="ติดต่อเจ้าหน้าที่ (24 ชม.)"
-                />
-
                 <p className="contact-section-title" style={{ marginTop: '20px' }}>ที่อยู่สำนักงาน</p>
 
                 <ContactItem

@@ -2,12 +2,13 @@
   --primary-green: #4CAF50;
   --dark-background: #1e1e1e;
   --text-color: #f0f0f0;
-  --input-background-color: #444444; 
+  --input-background-color: #444444;
   --input-placeholder-color: #bbbbbb;
   --light-green-hover: #43a047;
 }
 
-.prof-container { 
+
+.cp-container { 
     display: flex;
     flex-direction: column;
     background-color: var(--dark-background);
@@ -15,48 +16,46 @@
     min-height: 100vh;
     padding-bottom: 30px;
     font-family: sans-serif;
+    box-sizing: border-box;
 }
 
-.prof-header {
+.cp-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    background-color: #2a2a2a;
+    background-color: #2a2a2a; 
     border-bottom: 1px solid #333;
 }
 
-.prof-header-title {
-    font-size: 20px;
-    margin: 0;
-    text-align: center;
-    flex-grow: 1;
-}
-
-.prof-back-icon {
+.cp-back-icon {
     width: 24px;
     height: 24px;
     color: var(--text-color);
     cursor: pointer;
 }
 
-.prof-edit-button {
-    font-size: 16px;
-    width: 60px;
-    cursor: pointer;
-    font-weight: bold;
+.cp-header-title {
+    font-size: 20px;
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
 }
-.prof-form {
+
+.cp-form {
     padding: 20px;
+    width: 100%;
 }
-.prof-input-label {
+
+.cp-input-label {
     font-size: 15px;
     margin-top: 18px;
     margin-bottom: 8px;
     color: var(--input-placeholder-color);
     display: block;
 }
-.prof-input-group {
+
+.cp-input-group.cp-password-toggle-group {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -66,8 +65,16 @@
     width: 100%;
     margin-bottom: 18px;
 }
-.prof-text-input {
-    flex-grow: 1;
+
+.cp-input-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--input-placeholder-color);
+    font-size: 1.2rem;
+}
+
+.cp-text-input {
+    flex-grow: 1; 
     border: none;
     outline: none;
     background: transparent;
@@ -76,15 +83,19 @@
     padding: 0;
 }
 
-.prof-text-input::placeholder {
+.cp-text-input::placeholder {
     color: var(--input-placeholder-color);
 }
-.prof-calendar-icon {
+
+.cp-toggle-password-icon {
     width: 20px;
     height: 20px;
     color: var(--input-placeholder-color);
+    cursor: pointer;
+    font-size: 1.2rem;
 }
-.prof-submit-button {
+
+.cp-submit-button {
     width: 100%;
     padding: 15px;
     background-color: var(--primary-green);
@@ -98,6 +109,6 @@
     transition: 0.2s ease-in-out;
 }
 
-.prof-submit-button:hover {
+.cp-submit-button:hover {
     background-color: var(--light-green-hover);
 }

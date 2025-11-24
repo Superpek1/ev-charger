@@ -44,7 +44,7 @@ function SettingsScreen() {
                 <MenuItem
                     icon={FiCreditCard}
                     title="ช่องทางการชำระเงิน"
-                    onClick={() => console.log('ไปหน้าชำระเงิน')}
+                    onClick={() => navigate('/add-card')}
                 />
             </div>
 

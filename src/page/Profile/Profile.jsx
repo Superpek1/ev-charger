@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './Profile.css';
-import { FiArrowLeft } from 'react-icons/fi'; 
+import { FiArrowLeft } from 'react-icons/fi';
 import { FaCalendarAlt } from 'react-icons/fa';
 
-import { useAuth } from '../../utils/AuthContext'; 
+import { useAuth } from '../../utils/AuthContext';
 
 function Profile() {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
-    
-  
+
     const [profileData, setProfileData] = useState({
         username: '',
         idCard: '',
@@ -26,14 +25,14 @@ function Profile() {
         if (currentUser) {
             const usersJSON = localStorage.getItem('users');
             const existingUsers = usersJSON ? JSON.parse(usersJSON) : [];
-            
+
             const userProfile = existingUsers.find(u => u.username === currentUser);
-            
+
             if (userProfile) {
                 setProfileData(userProfile);
             } else {
                 setMessage('ไม่พบข้อมูลโปรไฟล์ กรุณาล็อกอินใหม่');
-                // navigate('/login'); 
+                
             }
         }
     }, [currentUser, navigate]);
@@ -61,11 +60,11 @@ function Profile() {
             existingUsers[userIndex] = {
                 ...existingUsers[userIndex],
                 ...profileData,
-                username: currentUser 
+                username: currentUser
             };
-            
+
             localStorage.setItem('users', JSON.stringify(existingUsers));
-            
+
             setMessage('บันทึกข้อมูลโปรไฟล์เรียบร้อยแล้ว!');
             setIsEditing(false);
         } else {
@@ -79,30 +78,28 @@ function Profile() {
 
 
     return (
-        <div className="register-container">
-            <header className="register-header">
-                <FiArrowLeft className="back-icon" onClick={() => navigate(-1)} /> 
-                <h1 className="header-title">ข้อมูลส่วนตัว ({currentUser})</h1>
-                <button 
-                    className="edit-button" 
-                    onClick={() => setIsEditing(!isEditing)} 
+        <div className="prof-container">
+            <header className="prof-header">
+                <FiArrowLeft className="prof-back-icon" onClick={() => navigate(-1)} />
+                <h1 className="prof-header-title">ข้อมูลส่วนตัว ({currentUser})</h1>
+                <button
+                    className="prof-edit-button" 
+                    onClick={() => setIsEditing(!isEditing)}
                     style={{ background: 'none', border: 'none', color: isEditing ? 'red' : 'white' }}
                 >
                     {isEditing ? 'ยกเลิก' : 'แก้ไข'}
                 </button>
             </header>
 
-            <form className="register-form" onSubmit={handleSave}> 
+            <form className="prof-form" onSubmit={handleSave}>
                 {message && <p style={{ color: message.includes('สำเร็จ') ? 'green' : 'red', marginBottom: '15px' }}>{message}</p>}
-                
-                {/* --- ข้อมูลส่วนตัว --- */}
-                
-                <label htmlFor="idCard" className="input-label">เลขบัตรประจำตัวประชาชน</label>
-                <div className="input-group">
+
+                <label htmlFor="idCard" className="prof-input-label">เลขบัตรประจำตัวประชาชน</label>
+                <div className="prof-input-group">
                     <input
                         id="idCard"
                         type="text"
-                        className="text-input"
+                        className="prof-text-input"
                         placeholder="เลขบัตรประจำตัวประชาชน"
                         value={profileData.idCard || ''}
                         onChange={handleChange}
@@ -110,12 +107,12 @@ function Profile() {
                     />
                 </div>
 
-                <label htmlFor="firstName" className="input-label">ชื่อ</label>
-                <div className="input-group">
+                <label htmlFor="firstName" className="prof-input-label">ชื่อ</label>
+                <div className="prof-input-group">
                     <input
                         id="firstName"
                         type="text"
-                        className="text-input"
+                        className="prof-text-input"
                         placeholder="ชื่อ"
                         value={profileData.firstName || ''}
                         onChange={handleChange}
@@ -123,12 +120,12 @@ function Profile() {
                     />
                 </div>
 
-                <label htmlFor="lastName" className="input-label">นามสกุล</label>
-                <div className="input-group">
+                <label htmlFor="lastName" className="prof-input-label">นามสกุล</label>
+                <div className="prof-input-group">
                     <input
                         id="lastName"
                         type="text"
-                        className="text-input"
+                        className="prof-text-input"
                         placeholder="นามสกุล"
                         value={profileData.lastName || ''}
                         onChange={handleChange}
@@ -136,26 +133,26 @@ function Profile() {
                     />
                 </div>
 
-                <label htmlFor="dob" className="input-label">วัน/เดือน/ปีเกิด</label>
-                <div className="input-group date-input">
+                <label htmlFor="dob" className="prof-input-label">วัน/เดือน/ปีเกิด</label>
+                <div className="prof-input-group prof-date-input">
                     <input
                         id="dob"
-                        type="text" 
-                        className="text-input"
+                        type="text"
+                        className="prof-text-input"
                         placeholder="วัน/เดือน/ปีเกิด"
                         value={profileData.dob || ''}
                         onChange={handleChange}
                         readOnly={!isEditing}
                     />
-                    <FaCalendarAlt className="calendar-icon" />
+                    <FaCalendarAlt className="prof-calendar-icon" />
                 </div>
 
-                <label htmlFor="phone" className="input-label">เบอร์โทรศัพท์</label>
-                <div className="input-group">
+                <label htmlFor="phone" className="prof-input-label">เบอร์โทรศัพท์</label>
+                <div className="prof-input-group">
                     <input
                         id="phone"
                         type="tel"
-                        className="text-input"
+                        className="prof-text-input"
                         placeholder="เบอร์โทรศัพท์"
                         value={profileData.phone || ''}
                         onChange={handleChange}
@@ -164,12 +161,12 @@ function Profile() {
                 </div>
 
                 {isEditing && (
-                    <button type="submit" className="submit-button">บันทึกการแก้ไข</button>
+                    <button type="submit" className="prof-submit-button">บันทึกการแก้ไข</button> 
                 )}
                 {!isEditing && (
-                     <Link to={'/setting'}>
-                        <button className="submit-button">ตกลง/กลับหน้าหลัก</button>
-                     </Link>
+                    <Link to={'/setting'}>
+                        <button className="prof-submit-button">ตกลง/กลับหน้าหลัก</button>
+                    </Link>
                 )}
             </form>
         </div>

@@ -2,18 +2,20 @@ import React, { useMemo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
 import './mycar.css'; 
-import { useAuth } from '../../utils/AuthContext'; // *** นำกลับมาใช้ ***
+import { useAuth } from '../../utils/AuthContext'; 
 
-// ----------------------------------------------------------------------
-// Component ย่อยสำหรับแสดงรถที่ผู้ใช้เป็นเจ้าของ (ไม่เปลี่ยนแปลง)
+
 const OwnedCarItem = ({ car, onDeleteCar }) => {
-    // ... (โค้ดของ OwnedCarItem) ...
     const displayLicensePlate = car.licensePlate || '— ไม่มีข้อมูลป้ายทะเบียน —'; 
 
     return (
         <div className="car-item">
             <div className="image-placeholder">
-                <img src={car.src} alt={car.Name} className="car-image" />
+                <img 
+                    src={car.src || 'placeholder-image-url'} 
+                    alt={car.Name} 
+                    className="car-image" 
+                />
             </div>
 
             <div className="car-info-table">
@@ -40,32 +42,26 @@ const OwnedCarItem = ({ car, onDeleteCar }) => {
         </div>
     );
 };
-// ----------------------------------------------------------------------
 
 
 function CarNowScreen() {
     const navigate = useNavigate();
-    const { currentUser } = useAuth(); // *** ดึงผู้ใช้ที่ล็อกอินจริง ***
+    const { currentUser } = useAuth(); 
     const [refresh, setRefresh] = useState(0); 
 
-    // ******* แก้ไขตรงนี้: ฟังก์ชันสำหรับดึงข้อมูลรถยนต์ *******
     const getOwnedCars = useCallback(() => {
-        if (!currentUser) return []; // ถ้าไม่ล็อกอิน จะคืนค่าว่าง
+        if (!currentUser) return [];
 
         const usersJSON = localStorage.getItem('users');
         const existingUsers = usersJSON ? JSON.parse(usersJSON) : [];
         
-        // ค้นหาบัญชีที่ล็อกอินอยู่ (currentUser)
         const user = existingUsers.find(u => u.username === currentUser);
-        
-        // คืนค่า Array ของรถยนต์ (หากไม่มีจะคืนค่าเป็น Array ว่าง [])
+
         return user && user.cars ? user.cars : [];
-    }, [currentUser, refresh]); // ใช้ currentUser เป็น dependency
+    }, [currentUser, refresh]);
 
     const ownedCars = useMemo(getOwnedCars, [getOwnedCars]);
 
-
-    // ฟังก์ชันสำหรับลบรถออกจากบัญชี
     const handleDeleteCar = (carId, carName, licensePlate) => {
         
         if (!currentUser) return alert('กรุณาล็อกอินก่อนลบรถยนต์');
@@ -77,27 +73,23 @@ function CarNowScreen() {
 
         const usersJSON = localStorage.getItem('users');
         let existingUsers = usersJSON ? JSON.parse(usersJSON) : [];
-        const userIndex = existingUsers.findIndex(u => u.username === currentUser); // ค้นหาผู้ใช้ที่ล็อกอินอยู่
+        const userIndex = existingUsers.findIndex(u => u.username === currentUser);
         
         if (userIndex !== -1) {
-            const user = existingUsers[userIndex];
-            
-            // กรองรถโดยใช้ Id และ LicensePlate
+            const user = { ...existingUsers[userIndex] }; 
+
             user.cars = user.cars.filter(car => 
                 !(car.Id === carId && car.licensePlate === licensePlate)
             );
             
-            // บันทึกกลับ Local Storage
-            existingUsers[userIndex] = user;
+            existingUsers[userIndex] = user; 
             localStorage.setItem('users', JSON.stringify(existingUsers));
             
             alert(`ลบ ${carName} สำเร็จแล้ว`);
-            
             setRefresh(prev => prev + 1); 
         }
     };
     
-    // ----------------------------------------------------------------------
 
     return (
         <div className="mycar-container">
@@ -125,7 +117,7 @@ function CarNowScreen() {
             ) : (
                 <div className="car-grid">
                     {ownedCars.map((car, index) => (
-                        <OwnedCarItem 
+                        <OwnedCarItem
                             key={`${car.Id}-${car.licensePlate || 'no-plate'}-${index}`} 
                             car={car} 
                             onDeleteCar={handleDeleteCar} 

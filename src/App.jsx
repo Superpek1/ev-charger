@@ -9,10 +9,11 @@ import RegisterScreen from './page/login/reginster.jsx';
 import LoginScreen from './page/login/login.jsx';
 import MyCarScreen from './page/car/mycar.jsx';
 import Profile from './page/Profile/Profile.jsx';
-import ChangePasswordScreen from './page/Profile/ChangePasswordScreen.jsx';
+import ChangePasswordScreen from './page/Passw/ChangePasswordScreen.jsx';
 import CarmeScreen from './page/car/carme.jsx';
 import CarNowScreen from './page/car/Car now.jsx';
 import TidtorScreen from './page/contact/tidtor.jsx';
+import AddCreditCardScreen from './page/pay/shumra.jsx';
 
 
 import { AuthProvider } from "./utils/AuthContext.jsx";
@@ -32,14 +33,10 @@ function App() {
     <div className="App">
       <AuthProvider>
         <Routes>
-
-          {/* --- 1. Public Routes --- */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} /> 
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
 
-
-          {/* 2. Protected Routes */}
 
           <Route path="/home" element={
             <ProtectedRoute><HomeScreen /></ProtectedRoute>
@@ -65,13 +62,17 @@ function App() {
             <ProtectedRoute><ChangePasswordScreen /></ProtectedRoute>
           } />
 
-          <Route path="/mygarage" element={
+          <Route path="/mygarage" element={ 
             <ProtectedRoute><CarNowScreen /></ProtectedRoute>
           } />
 
           <Route path="/contact" element={
             <ProtectedRoute><TidtorScreen /></ProtectedRoute>
           } />
+
+          <Route path="/add-card" element={
+    <ProtectedRoute><AddCreditCardScreen /></ProtectedRoute>
+} />
 
 
           <Route path="*" element={<h1 style={{ textAlign: 'center' }}>404 - ไม่พบหน้า</h1>} />
