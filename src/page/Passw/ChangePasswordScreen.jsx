@@ -156,7 +156,7 @@ function ChangePasswordScreen() {
 
                 {successMessage && <p style={{ color: '#90ee90', marginBottom: '15px', textAlign: 'center' }}>{successMessage}</p>}
 
-                {/* --- รหัสผ่านเดิม --- */}
+                {/  รหัสผ่านเดิม /}
                 <InputField
                     label="รหัสผ่านเดิม"
                     id="oldPassword"
@@ -167,7 +167,7 @@ function ChangePasswordScreen() {
                     togglePass={() => togglePasswordVisibility(setShowOldPass, showOldPass)}
                 />
 
-                {/* --- รหัสผ่านใหม่ --- */}
+                {/ รหัสผ่านใหม่ /}
                 <InputField
                     label="รหัสผ่านใหม่"
                     id="newPassword"
@@ -178,7 +178,7 @@ function ChangePasswordScreen() {
                     togglePass={() => togglePasswordVisibility(setShowNewPass, showNewPass)}
                 />
 
-                {/* --- ยืนยันรหัสผ่านใหม่ --- */}
+                {/ ยืนยันรหัสผ่านใหม่ /}
                 <InputField
                     label="ยืนยันรหัสผ่านใหม่"
                     id="confirmNewPassword"

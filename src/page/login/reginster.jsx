@@ -39,7 +39,7 @@ function RegisterScreen() {
         setLoading(true);
 
         try {
-            // ส่งข้อมูลไปสมัครสมาชิกที่ Backend
+            // ส่งข้อมูลไปสมัครสมาชิก
             await api.post('/auth/register', {
                 username: formData.username,
                 password: formData.password,
@@ -87,7 +87,6 @@ function RegisterScreen() {
                            value={formData.confirmPassword} onChange={handleChange} required />
                 </div>
 
-                {/* ข้อมูลส่วนตัวอื่นๆ (Input เหมือนเดิม แต่ใช้ handleChange) */}
                 <label htmlFor="idCard" className="input-label">เลขบัตรประชาชน</label>
                 <div className="input-group">
                     <input id="idCard" type="text" className="text-input" 
