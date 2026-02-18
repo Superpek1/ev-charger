@@ -1,0 +1,103 @@
+:root {
+  --primary-green: #4CAF50;
+  --dark-background: #1e1e1e;
+  --text-color: #f0f0f0;
+  --input-background-color: #444444; 
+  --input-placeholder-color: #bbbbbb;
+  --light-green-hover: #43a047;
+}
+
+.prof-container { 
+    display: flex;
+    flex-direction: column;
+    background-color: var(--dark-background);
+    color: var(--text-color);
+    min-height: 100vh;
+    padding-bottom: 30px;
+    font-family: sans-serif;
+}
+
+.prof-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #2a2a2a;
+    border-bottom: 1px solid #333;
+}
+
+.prof-header-title {
+    font-size: 20px;
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.prof-back-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.prof-edit-button {
+    font-size: 16px;
+    width: 60px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.prof-form {
+    padding: 20px;
+}
+.prof-input-label {
+    font-size: 15px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    color: var(--input-placeholder-color);
+    display: block;
+}
+.prof-input-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--input-background-color); 
+    border-radius: 12px;
+    padding: 15px 16px;
+    width: 100%;
+    margin-bottom: 18px;
+}
+.prof-text-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 15px;
+    padding: 0;
+}
+
+.prof-text-input::placeholder {
+    color: var(--input-placeholder-color);
+}
+.prof-calendar-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--input-placeholder-color);
+}
+.prof-submit-button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-green);
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #111;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+.prof-submit-button:hover {
+    background-color: var(--light-green-hover);
+}

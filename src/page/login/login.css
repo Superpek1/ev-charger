@@ -1,0 +1,125 @@
+:root {
+  --primary-green: #4CAF50;
+  --dark-background: #1e1e1e; 
+  --text-color: #f0f0f0; 
+  --input-background: #444444; 
+  --input-placeholder-color: #bbbbbb; 
+  --border-red: #8B0000; 
+  --light-green: #67d66b;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  min-height: 100vh;
+  padding: 50px 20px 20px;
+}
+
+.logo-placeholder {
+  width: 150px;
+  height: 150px;
+  background-color: transparent;
+  border-radius: 50%;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-base {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: var(--primary-green);
+  position: relative;
+}
+
+.welcome-text {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 40px;
+  color: var(--text-color);
+}
+
+.input-area {
+  width: 100%;
+  max-width: 350px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  background-color: var(--input-background);
+  border-radius: 30px;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+}
+
+.input-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--input-placeholder-color);
+  margin-right: 10px;
+}
+
+.login-input {
+  flex-grow: 1;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 16px;
+  padding: 5px 0;
+  outline: none;
+}
+
+.login-input::placeholder {
+  color: var(--input-placeholder-color);
+  opacity: 1; 
+}
+
+.login-button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 10px;
+  background-color: var(--light-green);
+  color: var(--dark-background);
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-button:hover {
+  background-color: #5ab65e;
+}
+
+.bottom-links {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 350px;
+  margin-top: 20px;
+}
+
+.forgot-password-link,
+.register-link {
+  color: var(--input-placeholder-color);
+  font-size: 14px;
+  padding: 5px;
+}
+
+.register-link {
+  color: var(--light-green); 
+}
+
+.error-message {
+    color: #ff4d4d;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+}

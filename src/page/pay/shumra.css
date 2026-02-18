@@ -1,0 +1,175 @@
+:root {
+    --primary-green: #4CAF50;
+    --dark-background: #1e1e1e;
+    --item-background: #444444; 
+    --text-color: #f0f0f0;
+    --input-placeholder-color: #bbbbbb; 
+    --danger-red: #D32F2F; 
+}
+
+.card-input-container, .card-view-container {
+    background-color: var(--dark-background);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+.card-input-header, .card-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 15px;
+    background-color: #2a2a2a;
+    border-bottom: 1px solid #333;
+}
+
+.back-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.header-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0;
+    flex-grow: 1; 
+    text-align: center;
+}
+
+.edit-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-color);
+    cursor: pointer;
+    margin-left: 10px; 
+}
+
+.card-form {
+    padding: 20px;
+}
+
+.input-label {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.text-input {
+    width: 100%;
+    padding: 15px 15px;
+    background-color: var(--item-background); 
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.text-input::placeholder {
+    color: var(--input-placeholder-color);
+    opacity: 1; 
+}
+
+.expiry-cvv-group {
+    display: flex;
+    gap: 15px; 
+}
+
+.input-col {
+    flex: 1; 
+}
+
+.submit-button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-green);
+    color: var(--dark-background);
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #43a047;
+}
+
+.delete-button {
+    background-color: var(--danger-red);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-button:hover {
+    background-color: #b71c1c;
+}
+
+.initial-message-box {
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 40px;
+    padding-top: 40px; 
+}
+
+.message-text {
+    font-size: 18px;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.card-info-box {
+    padding: 20px;
+    margin: 20px;
+    background-color: var(--item-background);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.card-icon-display {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: var(--primary-green);
+}
+
+.card-number-display {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-name-display {
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #ccc;
+    margin-bottom: 15px;
+}
+
+.card-details-row {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.note-text {
+    font-style: italic;
+    font-size: 12px;
+    margin-top: 20px;
+    color: var(--primary-green);
+}
+
+.card-view-container .submit-button {
+    margin: 0 20px;
+    width: calc(100% - 40px);
+}

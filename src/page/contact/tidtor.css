@@ -1,0 +1,83 @@
+.tidtor-container {
+    background-color: #1c1c1c;
+    min-height: 100vh;
+    color: white;
+}
+
+.tidtor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #121212;
+}
+
+.tidtor-header .back-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.tidtor-header .header-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.contact-section-title {
+    padding: 15px 20px 5px;
+    font-size: 14px;
+    color: #a0a0a0;
+    font-weight: 500;
+    text-align: left;
+    margin-top: 10px;
+}
+
+.contact-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #4CAF50;
+
+    color: #000000;
+
+    margin-bottom: 0;
+    border-radius: 0;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.1s;
+}
+
+.contact-item:active {
+    background-color: #43A047;
+}
+
+.contact-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.contact-icon {
+    font-size: 20px;
+    margin-right: 15px;
+    color: #000000;
+}
+
+.contact-label {
+    font-weight: 500;
+}
+
+.contact-value {
+    font-size: 14px;
+    color: #333333;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.contact-arrow {
+    font-size: 18px;
+    margin-left: 0;
+    color: #000000;
+    font-weight: bold;
+}
