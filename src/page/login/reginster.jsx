@@ -7,17 +7,17 @@ import api from '../../api/axios';
 
 function RegisterScreen() {
     const navigate = useNavigate();
-    
-    // State สำหรับ Form Data
+
     const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-        confirmPassword: '',
+        userName: '',      
+        password: '',           
+        confirmPassword: '',    
+        userEmail: '',     
         idCard: '',
         firstName: '',
         lastName: '',
         dob: '',
-        phone: ''
+        userPhoneNO: ''      
     });
 
     const [error, setError] = useState('');
@@ -39,15 +39,15 @@ function RegisterScreen() {
         setLoading(true);
 
         try {
-            // ส่งข้อมูลไปสมัครสมาชิก
-            await api.post('/auth/register', {
-                username: formData.username,
-                password: formData.password,
-                idCard: formData.idCard,
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                dob: formData.dob,
-                phone: formData.phone
+            await api.post('/users/register', {
+                userName: formData.userName,
+                userEmail: formData.userEmail,
+                userPhoneNO: formData.userPhoneNO,
+                userPassword: formData.password,
+                idCard: formData.idCard,           
+                firstName: formData.firstName,     
+                lastName: formData.lastName,      
+                dob: formData.dob                  
             });
 
             alert('สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
@@ -69,53 +69,59 @@ function RegisterScreen() {
             </header>
 
             <form className="register-form" onSubmit={handleRegister}>
-                <label htmlFor="username" className="input-label">ชื่อผู้ใช้</label>
+                <label htmlFor="userName" className="input-label">ชื่อผู้ใช้</label>
                 <div className="input-group">
-                    <input id="username" type="text" className="text-input" 
-                           value={formData.username} onChange={handleChange} required />
+                    <input id="userName" type="text" className="text-input"
+                        value={formData.userName} onChange={handleChange} required />
                 </div>
 
                 <label htmlFor="password" className="input-label">รหัสผ่าน</label>
                 <div className="input-group">
-                    <input id="password" type="password" className="text-input" 
-                           value={formData.password} onChange={handleChange} required />
+                    <input id="password" type="password" className="text-input"
+                        value={formData.password} onChange={handleChange} required />
                 </div>
 
                 <label htmlFor="confirmPassword" className="input-label">ยืนยันรหัสผ่าน</label>
                 <div className="input-group">
-                    <input id="confirmPassword" type="password" className="text-input" 
-                           value={formData.confirmPassword} onChange={handleChange} required />
+                    <input id="confirmPassword" type="password" className="text-input"
+                        value={formData.confirmPassword} onChange={handleChange} required />
+                </div>
+
+                <label htmlFor="userEmail" className="input-label">e-mail</label>
+                <div className="input-group">
+                    <input id="userEmail" type="email" className="text-input"
+                        value={formData.userEmail} onChange={handleChange} required />
                 </div>
 
                 <label htmlFor="idCard" className="input-label">เลขบัตรประชาชน</label>
                 <div className="input-group">
-                    <input id="idCard" type="text" className="text-input" 
-                           value={formData.idCard} onChange={handleChange} />
+                    <input id="idCard" type="text" className="text-input"
+                        value={formData.idCard} onChange={handleChange} />
                 </div>
-                
+
                 <label htmlFor="firstName" className="input-label">ชื่อ</label>
                 <div className="input-group">
-                    <input id="firstName" type="text" className="text-input" 
-                           value={formData.firstName} onChange={handleChange} />
+                    <input id="firstName" type="text" className="text-input"
+                        value={formData.firstName} onChange={handleChange} />
                 </div>
 
                 <label htmlFor="lastName" className="input-label">นามสกุล</label>
                 <div className="input-group">
-                    <input id="lastName" type="text" className="text-input" 
-                           value={formData.lastName} onChange={handleChange} />
+                    <input id="lastName" type="text" className="text-input"
+                        value={formData.lastName} onChange={handleChange} />
                 </div>
 
-                <label htmlFor="dob" className="input-label">วันเกิด</label>
-                <div className="input-group date-input">
-                    <input id="dob" type="text" className="text-input" 
-                           value={formData.dob} onChange={handleChange} placeholder="DD/MM/YYYY"/>
+                <label htmlFor="dob" className="input-label1">วันเกิด</label>
+                <div className="input-group date-input1">
+                    <input id="dob" type="date" className="text-input"
+                        value={formData.dob} onChange={handleChange} />
                     <FaCalendarAlt className="calendar-icon" />
                 </div>
 
-                <label htmlFor="phone" className="input-label">เบอร์โทรศัพท์</label>
+                <label htmlFor="userPhoneNO" className="input-label">เบอร์โทรศัพท์</label>
                 <div className="input-group">
-                    <input id="phone" type="tel" className="text-input" 
-                           value={formData.phone} onChange={handleChange} />
+                    <input id="userPhoneNO" type="tel" className="text-input"
+                        value={formData.userPhoneNO} onChange={handleChange} />
                 </div>
 
                 {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}

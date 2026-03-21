@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-import { FiUser, FiLock } from 'react-icons/fi';
+import { FiMail, FiLock } from 'react-icons/fi'; // เปลี่ยนไอคอนเป็นรูปจดหมาย
 import { useAuth } from '../../utils/AuthContext';
 import api from '../../api/axios';
 
@@ -9,30 +9,35 @@ function LoginScreen() {
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    const [username, setUsername] = useState('');
+    // เปลี่ยน state จาก username เป็น email
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError('');
         setLoading(true);
-
+        setError('');
+        
         try {
-            const response = await api.post('/auth/login', {
-                username,
-                password
+            // ✅ แก้ตรงนี้ครับ! เปลี่ยนจาก userEmail เป็น identifier
+            const response = await api.post('/users/login', { 
+                identifier: email,  // ส่งกล่องชื่อ identifier ไปให้ Backend
+                userPassword: password 
             });
-            const { token, user } = response.data;
-            localStorage.setItem('token', token);
-            login(user.username);
-
+            
+            const { token, role, message } = response.data;
+            alert(message); // แจ้งเตือนว่าเข้าสู่ระบบสำเร็จ
+            
+            // บันทึกข้อมูลลง Context (เก็บค่า email ไปใช้ต่อ)
+            login({ userEmail: email, role }, token); 
+            
+            // พาไปหน้าถัดไป
             navigate('/setting');
-
+            
         } catch (err) {
-            console.error("Login Error:", err);
-            setError(err.response?.data?.message || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+            setError(err.response?.data?.message || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง');
         } finally {
             setLoading(false);
         }
@@ -42,13 +47,13 @@ function LoginScreen() {
         <div className="login-container">
             <form className="input-area" onSubmit={handleLogin}>
                 <div className="input-group">
-                    <FiUser className="input-icon" />
+                    <FiMail className="input-icon" />
                     <input
-                        type="text"
+                        type="text" 
                         className="login-input"
-                        placeholder="ชื่อผู้ใช้"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="username หรืออีเมล (E-mail)"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                 </div>
@@ -65,7 +70,7 @@ function LoginScreen() {
                     />
                 </div>
 
-                {error && <p className="error-message">{error}</p>}
+                {error && <p className="error-message" style={{color: 'red', textAlign: 'center', marginBottom: '10px'}}>{error}</p>}
 
                 <button type="submit" className="login-button" disabled={loading}>
                     {loading ? 'กำลังเข้าสู่ระบบ...' : 'LOGIN'}
