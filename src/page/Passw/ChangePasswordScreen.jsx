@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Pass.css';
 import { FiArrowLeft, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useAuth } from '../../utils/AuthContext'; 
-import api from '../../api/axios'; // ✅ นำเข้า api
+import api from '../../api/axios';
 
 const InputField = React.memo(({ label, id, placeholder, value, onChange, showPass, togglePass }) => (
     <>

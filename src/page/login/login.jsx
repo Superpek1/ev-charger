@@ -21,19 +21,16 @@ function LoginScreen() {
         setError('');
         
         try {
-            // ✅ แก้ตรงนี้ครับ! เปลี่ยนจาก userEmail เป็น identifier
             const response = await api.post('/users/login', { 
-                identifier: email,  // ส่งกล่องชื่อ identifier ไปให้ Backend
+                identifier: email,  
                 userPassword: password 
             });
             
             const { token, role, message } = response.data;
-            alert(message); // แจ้งเตือนว่าเข้าสู่ระบบสำเร็จ
+            alert(message); 
             
-            // บันทึกข้อมูลลง Context (เก็บค่า email ไปใช้ต่อ)
             login({ userEmail: email, role }, token); 
             
-            // พาไปหน้าถัดไป
             navigate('/setting');
             
         } catch (err) {
